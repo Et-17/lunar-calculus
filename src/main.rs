@@ -2,6 +2,7 @@
 extern crate log;
 
 mod cli_parsing;
+mod tokenization;
 
 fn main() {
     let args = cli_parsing::parse_arguments();
