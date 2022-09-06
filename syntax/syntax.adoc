@@ -1,0 +1,19 @@
+= Lunar Calculus Syntax
+:toc:
+
+So many lambda calculus interpreters are focused on small little scripts, and
+make it very hard to write large programs with it. I've always found lambda
+calculus so interesting, and wanted to make some big programs and perhaps even
+libraries for it. To solve this, I set out to make a lambda calculus interpreter
+that can handle these programs, and has support for other useful things such as
+multiple files. That is what I intend to acheive with Lunar Calculus. This
+document will serve as the official specification for its syntax, to guide the 
+creation of its interpreter.
+
+NOTE: Lunar Calculus is still very new, and this document could change at any 
+time, for any reason.
+
+include::applications.adoc[]
+include::lambdas.adoc[]
+include::definitions.adoc[]
+include::execution.adoc[]

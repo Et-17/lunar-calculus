@@ -1,0 +1,22 @@
+== Definitions
+Obviously, we need to make definitions so that we can reuse code and increase
+readability. It would suck if we had to write our entire program directly in
+hand written lambdas, and it would take a lot of time and space. Instead, we
+define common abstractions that we can use to simplify our programs. They also
+reduce build time and allow the interpreter to reuse previously simplified 
+definitions.
+
+=== Basic Definitions
+We can define a new abstraction with the `let` keyword, followed by the function
+name, a `\=>` arrow, and the value. For example, we can define an add function
+with `let add \=> \(a; b; f; x) \-> a f (b f x)`. This definition can then be
+used in other definitions. For example we can use this previously defined add
+function to add one and two together with `let three \=> add one two`.
+
+=== Recursive Definitions
+A lot of languages, if not almost every language, allows recursive definitions
+of functions. However, lambda calculus does not need them to acheive turing
+completeness, and they can lead to a whole host of other issues, as well as
+deviating from just pure lambda calculus, and therefore the goals of this Lunar
+Calculus. Recursion can acheived using fixed point combinators instead.
+

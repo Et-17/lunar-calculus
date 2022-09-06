@@ -1,0 +1,3 @@
+## Execution
+The definition that is bound to `main` is what is evaluated as the program. If
+there is no definition for main, then nothing will happen.

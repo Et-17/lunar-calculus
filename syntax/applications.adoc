@@ -1,0 +1,30 @@
+## Applications
+With the syntax for application, I have tried to remain as close to the original
+lambda calculus notation as possible, but taking some derivation in places where
+it makes sense
+
+### Simple Applications
+Basic applications are represented by putting the argument after the function,
+separated by whitespace. For example, in order to apply `a` to `b`, we can write
+`a b`, or if we wanted to be more explicit, `a(b)`.
+
+NOTE: While in most languages, especially imperitive ones, surround the argument
+of a function with parenthesis is actually a part of the function application
+syntax, in Lunar Calculus, the parenthesis are instead interpreted as execution
+order hints, which result in the value that is then applied to the function. It
+is functionally equivalent, however, and this aspect should not matter in normal
+programming.
+
+### Application Order
+As in the original lambda calculus, expressions are evaluated left to right. For
+example, the expression `a b c d` is equivalent to `(((a b) c) d)`. Of course,
+expressions in parenthesis get a higher precedence that expressions not in
+parenthesis. When evaluating statements, the interpreter uses outermost
+evaluation. This allows the programmer to use things such as y combinators and
+other lazy evaluation based constructs. Furthermore, it prevents evaluation of
+useless code. For example, if we have an expression being passed as the second
+argument of a K combinator, that branch of the evaluation tree will be pruned
+before its evaluation because the K combinator doesn't use the second argument.
+If we used innermost evaluation, the interpreter would first evaluate the branch
+and then discard it, wasting value time and effort.
+

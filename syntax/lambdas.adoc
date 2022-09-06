@@ -1,0 +1,31 @@
+== Lambdas
+For the lambas, I took inspiration from Haskell, but made the argument block
+more obvious, because in Haskell it can be a bit confusing.
+
+=== Single Argument Functions
+In lambda calculus we can represent a function that takes in a single argument,
+binds it to `a`, and returns the variable bound to `b` as `λa.b`. In Haskell we
+can represent this as `\a \-> b`. In Lunar Calculus I have chosen to go with the
+form `\(a) \-> b`. Already, you can see the similarities, except for the
+parenthesis around the argument.
+
+NOTE: Lambdas definition include all remaining expressions in the current block,
+so makesure that all lambda expressions are placed in parenthesis.
+
+=== Curried Functions
+Obviously, functions with only a single argument aren't very useful. However, in
+lambda calculus, we only have functions with a single argument. Thankfully, this
+was solved by Haskell Curry. For example, in order to make a function that takes
+two arguments we make a function that takes in the first argument, and returns a
+function that takes in the second argument. This is called currying. In lambda
+calculus, we can represent this with, for example, `λa.λb.a`, or using the short
+form, `λab.a`. In Haskell, we can represent this with `\a b \-> a`. Finally, in
+Lunar Calculus we represent this with `\(a; b) \-> a`. As you can see, we wrap
+the argument block in parenthesis, and separate the arguments with semicolons.
+This allows the curried lambda expressions to be much more readable and less
+confusing. Obviously, this is just syntactic sugar for `\(a) \-> \(b) \-> a`,
+and I've tried to stay away from baked in sugar to remain as close to the actual
+lambda calculus as possible, but this shortened form of curried lambdas is so
+common, that I felt it would simply be an inconvience to omit it. It is still
+converted to the expanded form internally.
+
