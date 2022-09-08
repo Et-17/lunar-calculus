@@ -1,3 +1,5 @@
+use std::{fs::File, io::BufReader};
+
 #[macro_use]
 extern crate log;
 
@@ -7,14 +9,8 @@ mod tokenization;
 fn main() {
     let args = cli_parsing::parse_arguments();
     env_logger::init();
-    info!("Starting up");
-    info!("Passed lambda files:");
-    for ele in args.files {
-        info!("  {:?}", ele);
-    }
-    error!("Error message");
-    warn!("Warning message");
-    info!("Information message");
-    debug!("Debug message");
-    trace!("Trace message");
+    info!("Logger initialized");
+    let fs = File::open(&args.files[0]).unwrap();
+    let mut reader = BufReader::new(fs);
+    println!("{:#?}", tokenization::tokenize_file(&mut reader));
 }
