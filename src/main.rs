@@ -4,6 +4,7 @@ use std::{fs::File, io::BufReader};
 extern crate log;
 
 mod cli_parsing;
+mod scanning;
 mod tokenization;
 
 fn main() {
