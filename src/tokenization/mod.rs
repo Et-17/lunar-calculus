@@ -41,12 +41,12 @@ pub fn tokenize_line(line: &str) -> Result<Vec<Token>, Vec<String>> {
                     continue;
                 }
                 start = current;
-                while line.len() - current > 1 && is_identifier_char(line_chars[current]) {
+                while line.len() - current >= 1 && is_identifier_char(line_chars[current]) {
                     current += 1;
                 }
                 tokens.push(Token::new(
                     TokenTypes::IdentifierName,
-                    line[start..current + 1].to_string(),
+                    line[start..current].to_string(),
                 ));
             }
             '=' => {
