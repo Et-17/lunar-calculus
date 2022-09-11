@@ -13,5 +13,7 @@ fn main() {
     info!("Logger initialized");
     let fs = File::open(&args.files[0]).unwrap();
     let mut reader = BufReader::new(fs);
-    println!("{:#?}", tokenization::tokenize_file(&mut reader));
+    let tokens = &tokenization::tokenize_file(&mut reader).unwrap()[0][3..];
+    println!("{:?}", tokens);
+    println!("1st line group: {:#?}", scanning::group_parenthesis(tokens));
 }

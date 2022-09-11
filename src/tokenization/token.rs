@@ -1,6 +1,7 @@
 use std::fmt;
 use std::fmt::Debug;
 
+#[derive(Clone)]
 pub enum TokenTypes {
     OpeningParenthesis,
     ClosingParenthesis,
@@ -31,6 +32,7 @@ impl Debug for TokenTypes {
     }
 }
 
+#[derive(Clone)]
 pub struct Token {
     pub token_type: TokenTypes,
     pub value: String,
