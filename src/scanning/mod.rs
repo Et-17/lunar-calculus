@@ -3,6 +3,35 @@ mod tree;
 use crate::tokenization::{Token, TokenTypes};
 pub use tree::*;
 
+pub fn group_lambda(segment: &ParenthesisGrouping) -> Option<LambdaGrouping> {
+    let mut grouping = LambdaGrouping::new(Vec::new(), Vec::new());
+    let mut tokens = segment.group()?;
+    if !matches!(tokens[0].token()?.token_type, TokenTypes::LambdaSlash) {
+        return None;
+    }
+    let args = tokens[1].group()?;
+    for i in 0..(args.len() / 2) {
+        if !matches!(
+            args[(i * 2) + 1].token()?.token_type,
+            TokenTypes::LambdaArgumentSeparator
+        ) {
+            return None;
+        }
+        let next_tok = args[i * 2].token()?;
+        if !matches!(next_tok.token_type, TokenTypes::IdentifierName) {
+            return None;
+        }
+        grouping.arguments.push(next_tok.to_owned().value);
+    }
+    if args.len() % 2 == 1 {
+        grouping
+            .arguments
+            .push(args.last()?.token()?.to_owned().value);
+    }
+    grouping.body = tokens[3..].to_vec();
+    return Some(grouping);
+}
+
 pub fn group_parenthesis(segment: &[Token]) -> Option<ParenthesisGrouping> {
     let mut tokens: Vec<ParenthesisGrouping> = Vec::new();
     for i in segment.to_owned() {
