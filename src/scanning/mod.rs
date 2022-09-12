@@ -5,7 +5,7 @@ pub use tree::*;
 
 pub fn group_lambda(segment: &ParenthesisGrouping) -> Option<LambdaGrouping> {
     let mut grouping = LambdaGrouping::new(Vec::new(), Vec::new());
-    let mut tokens = segment.group()?;
+    let tokens = segment.group()?;
     if !matches!(tokens[0].token()?.token_type, TokenTypes::LambdaSlash) {
         return None;
     }
@@ -27,6 +27,9 @@ pub fn group_lambda(segment: &ParenthesisGrouping) -> Option<LambdaGrouping> {
         grouping
             .arguments
             .push(args.last()?.token()?.to_owned().value);
+    }
+    if !matches!(tokens[2].token()?.token_type, TokenTypes::LambdaArrow) {
+        return None;
     }
     grouping.body = tokens[3..].to_vec();
     return Some(grouping);
