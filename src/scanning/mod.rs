@@ -3,6 +3,18 @@ mod tree;
 use crate::tokenization::{Token, TokenTypes};
 pub use tree::*;
 
+pub fn is_lambda(lambda: &ParenthesisGrouping) -> bool {
+    if let Some(group) = lambda.group() {
+        if group.len() > 1 {
+            return false;
+        }
+        if let Some(token) = group[0].token() {
+            return matches!(token.token_type, TokenTypes::LambdaSlash);
+        }
+    }
+    return false;
+}
+
 pub fn astify_lambda(lambda: &LambdaGrouping) -> Option<ParenthesisGrouping> {
     if lambda.arguments.len() == 1 {
         return Some(ParenthesisGrouping::Processed(TreeNode::Lambda(

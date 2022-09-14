@@ -21,4 +21,5 @@ fn main() {
     println!("1st line lambda group: {:#?}", firstlambda);
     let ast_lambda = scanning::astify_lambda(&firstlambda).unwrap();
     println!("1st line astified lambda: {:#?}", ast_lambda);
+    println!("1st line is a lambda: {}", scanning::is_lambda(&firstline));
 }
