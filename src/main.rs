@@ -19,4 +19,6 @@ fn main() {
     println!("1st line group: {:#?}", firstline);
     let firstlambda = scanning::group_lambda(&firstline).unwrap();
     println!("1st line lambda group: {:#?}", firstlambda);
+    let ast_lambda = scanning::astify_lambda(&firstlambda).unwrap();
+    println!("1st line astified lambda: {:#?}", ast_lambda);
 }

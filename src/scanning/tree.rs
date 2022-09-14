@@ -1,14 +1,10 @@
 use crate::tokenization::Token;
 
+#[derive(Clone, Debug)]
 pub enum TreeNode {
     Variable(String),
     Application(Box<TreeNode>, Box<TreeNode>),
-    Lambda(String, Box<TreeNode>),
-}
-
-pub struct VariableDefinition {
-    pub name: String,
-    pub value: TreeNode,
+    Lambda(String, Box<ParenthesisGrouping>),
 }
 
 #[derive(Debug)]
@@ -30,6 +26,7 @@ impl LambdaGrouping {
 pub enum ParenthesisGrouping {
     Grouping(Vec<ParenthesisGrouping>),
     Token(Token),
+    Processed(TreeNode),
 }
 
 impl ParenthesisGrouping {
