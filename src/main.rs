@@ -4,6 +4,7 @@ use std::{fs::File, io::BufReader};
 extern crate log;
 
 mod cli_parsing;
+mod parser;
 
 fn main() {
     let args = cli_parsing::parse_arguments();
