@@ -1,0 +1,17 @@
+== Comments
+Single line comments are started with `#` and multiline comments are started and
+ended with `###`. For example, you could write a single line comments with
+----
+# This is one in Church representation
+let one => (\(f; x) f x)
+# This is two in church representation
+let two => (\(f; x) f (f x))
+----
+And multiline comments can be written as
+----
+###
+This is a multiline comment
+It spans multiple lines
+See?
+###
+----

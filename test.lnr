@@ -1,5 +1,13 @@
-let add => \(a; b; f; x) -> a f (b f x)
-let one => \(f; x) -> f x
-let two => \(f; x) -> f(f x)
+###
+This is the primary test file of Lunar Calculus
+Here is put an exploitation of all features
+###
+
+let add => (\(a; b; f; x) a f (b f x))
+let one => (\(f; x) f x)
+let two => (\(f; x) f(f x))
+
+# This is a Y Combinator, invented by Haskell Curry
+let ycomb => (\(f) (\(x) f(x x)) (\(x) f(x x)))
 
 let main => add one two

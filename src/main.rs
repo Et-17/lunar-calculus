@@ -4,8 +4,7 @@ use std::{fs::File, io::BufReader};
 extern crate log;
 
 mod cli_parsing;
-mod scanning;
-mod tokenization;
+mod parser;
 
 fn main() {
     let args = cli_parsing::parse_arguments();
@@ -13,13 +12,6 @@ fn main() {
     info!("Logger initialized");
     let fs = File::open(&args.files[0]).unwrap();
     let mut reader = BufReader::new(fs);
-    let tokens = &tokenization::tokenize_file(&mut reader).unwrap()[0][3..];
-    let firstline = scanning::group_parenthesis(tokens).unwrap();
-    println!("{:?}", tokens);
-    println!("1st line group: {:#?}", firstline);
-    let firstlambda = scanning::group_lambda(&firstline).unwrap();
-    println!("1st line lambda group: {:#?}", firstlambda);
-    let ast_lambda = scanning::astify_lambda(&firstlambda).unwrap();
-    println!("1st line astified lambda: {:#?}", ast_lambda);
-    println!("1st line is a lambda: {}", scanning::is_lambda(&firstline));
+    let parsed = parser::parse_file(&mut reader, args.files[0].to_str().unwrap().to_string());
+    println!("{:#?}", parsed);
 }

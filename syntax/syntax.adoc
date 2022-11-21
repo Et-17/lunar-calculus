@@ -13,6 +13,7 @@ creation of its interpreter.
 NOTE: Lunar Calculus is still very new, and this document could change at any 
 time, for any reason.
 
+include::comments.adoc[]
 include::applications.adoc[]
 include::lambdas.adoc[]
 include::definitions.adoc[]
