@@ -83,15 +83,18 @@ pub fn parse_body(line: &str, prev_defs: &[file::Definition]) -> Result<file::Te
                 if chars[current + 1] != '(' {
                     return Err("Lambda slash not followed by parenthesis".to_string());
                 }
+
                 current += 2;
                 start = current + 2;
                 let mut args: Vec<String> = Vec::new();
                 let mut id_started = false;
+
                 while chars[current] != ')' {
                     if chars[current].is_whitespace() {
                         current += 1;
                         continue;
                     }
+
                     if chars[current] == ';' {
                         if !id_started {
                             return Err("Empty argument name".to_string());
@@ -101,15 +104,22 @@ pub fn parse_body(line: &str, prev_defs: &[file::Definition]) -> Result<file::Te
                         current += 1;
                         continue;
                     }
+
                     if !id_started {
                         start = current;
                         id_started = true;
                         current += 1;
                         continue;
                     }
+
                     current += 1;
                     continue;
                 }
+
+                if id_started {
+                    args.push(line[start..current].to_string());
+                }
+
                 env_variables.push(args);
                 dump.push((stack, nesting_level, op_stack_size));
                 stack = Vec::new();
