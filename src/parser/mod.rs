@@ -9,12 +9,26 @@ use iter_tools::Itertools;
 
 pub fn parse_file(file: &mut BufReader<File>, name: String) -> Result<file::File, String> {
     let mut definitions = Vec::new();
+    let mut block_comment = false;
     for line in file.lines() {
         let unwrapped = line.unwrap();
         let trimmed = unwrapped.trim();
+
         if trimmed.len() == 0 {
             continue;
         }
+
+        if trimmed.starts_with("###") {
+            block_comment = !block_comment;
+            continue;
+        } else if trimmed.starts_with("#") {
+            continue;
+        }
+
+        if block_comment {
+            continue;
+        }
+
         definitions.push(parse_definition(trimmed, &definitions)?);
     }
     Ok(file::File { name, definitions })
