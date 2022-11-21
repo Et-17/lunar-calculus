@@ -146,7 +146,7 @@ pub fn parse_body(line: &str, prev_defs: &[file::Definition]) -> Result<file::Te
                         stack.push(file::Term::App(file::Application { argument, function }));
                     }
                     if stack.len() != 1 {
-                        return Err("Impossible".to_string());
+                        return Err("An impossible situation has occurred".to_string());
                     }
                     let complete = file::Term::Lam(file::Lambda {
                         arg_count: env_variables.last().unwrap().len(),
@@ -173,7 +173,7 @@ pub fn parse_body(line: &str, prev_defs: &[file::Definition]) -> Result<file::Te
 
                 if !c.is_alphanumeric() {
                     // Is not an identifier
-                    return Err("TODO".to_string());
+                    return Err("Invalid character".to_string());
                 }
 
                 start = current;
