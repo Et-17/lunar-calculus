@@ -10,12 +10,25 @@ use iter_tools::Itertools;
 pub fn parse_file(file: &mut BufReader<File>, name: String) -> Result<file::File, String> {
     let mut definitions = Vec::new();
     for line in file.lines() {
-        definitions.push(parse_definition(line.unwrap().as_str())?);
+        let unwrapped = line.unwrap();
+        let trimmed = unwrapped.trim();
+        if trimmed.len() == 0 {
+            continue;
+        }
+        definitions.push(parse_definition(trimmed, &definitions)?);
     }
     Ok(file::File { name, definitions })
 }
 
-pub fn parse_definition(line: &str) -> Result<file::Definition, String> {
+pub fn parse_definition(
+    line: &str,
+    prev_defs: &[file::Definition],
+) -> Result<file::Definition, String> {
+    // check line length
+    if line.len() < 3 {
+        return Err("Line too short".to_string());
+    }
+
     // check let token presence
     if line[0..=2] != *"let" {
         return Err("Line does not contain let token".to_string());
@@ -48,13 +61,13 @@ pub fn parse_definition(line: &str) -> Result<file::Definition, String> {
     }
 
     // parse body
-    let value = parse_body(&line[end + 4..])?;
+    let value = parse_body(&line[end + 4..], prev_defs)?;
 
     // return constructed definition
     Ok(file::Definition { name, value })
 }
 
-pub fn parse_body(line: &str) -> Result<file::Term, String> {
+pub fn parse_body(line: &str, prev_defs: &[file::Definition]) -> Result<file::Term, String> {
     let mut start: usize;
     let mut current: usize = 0;
     let mut env_variables: Vec<Vec<String>> = Vec::new();
@@ -102,6 +115,7 @@ pub fn parse_body(line: &str) -> Result<file::Term, String> {
                 stack = Vec::new();
                 nesting_level = 0;
                 op_stack_size = 0;
+                first_op = true;
             }
             '(' => {
                 if !first_op && op_stack_size == nesting_level {
@@ -153,14 +167,14 @@ pub fn parse_body(line: &str) -> Result<file::Term, String> {
                 }
 
                 start = current;
-                while chars[current].is_alphanumeric() {
+                while current < chars.len() && chars[current].is_alphanumeric() {
                     current += 1;
                 }
                 let identifier = line[start..current].to_string();
                 current -= 1; // the code will bump current back up later
 
-                // Convert to DeBruijin
-                let debruijin: u32;
+                // Convert to DeBruijin variable (or insert referenced def)
+                let resolved: file::Term;
                 match env_variables
                     .iter()
                     .flatten()
@@ -168,12 +182,13 @@ pub fn parse_body(line: &str) -> Result<file::Term, String> {
                     .find_position(|x| identifier.eq(*x))
                 {
                     None => {
-                        return Err(format!(
-                            "Invalid identifier {}",
-                            line[start..current].to_string()
-                        ));
+                        // Maybe it's a previous def
+                        match prev_defs.iter().find(|x| identifier.eq(&x.name)) {
+                            None => return Err(format!("Invalid identifier {}", identifier)),
+                            Some(d) => resolved = d.value.clone(),
+                        }
                     }
-                    Some(p) => debruijin = p.0 as u32,
+                    Some(p) => resolved = file::Term::Var(file::Variable { index: p.0 as u32 }),
                 }
 
                 if !first_op && op_stack_size == nesting_level {
@@ -184,7 +199,7 @@ pub fn parse_body(line: &str) -> Result<file::Term, String> {
                     stack.push(file::Term::App(file::Application { argument, function }));
                 }
 
-                stack.push(file::Term::Var(file::Variable { index: debruijin }));
+                stack.push(resolved);
                 first_op = false;
             }
         }
