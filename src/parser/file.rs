@@ -19,7 +19,6 @@ pub enum Term {
 
 #[derive(Clone, Debug)]
 pub struct Lambda {
-    pub arg_count: usize,
     pub body: Box<Term>,
 }
 

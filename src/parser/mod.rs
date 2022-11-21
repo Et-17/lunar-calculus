@@ -148,10 +148,14 @@ pub fn parse_body(line: &str, prev_defs: &[file::Definition]) -> Result<file::Te
                     if stack.len() != 1 {
                         return Err("An impossible situation has occurred".to_string());
                     }
-                    let complete = file::Term::Lam(file::Lambda {
-                        arg_count: env_variables.last().unwrap().len(),
-                        body: Box::new(stack[0].clone()),
-                    });
+                    let complete = (0..env_variables.last().unwrap().len()).fold(
+                        stack[0].clone(),
+                        |prev, _| {
+                            file::Term::Lam(file::Lambda {
+                                body: Box::new(prev),
+                            })
+                        },
+                    );
                     (stack, nesting_level, op_stack_size) = dump.pop().unwrap();
                     env_variables.pop();
                     stack.push(complete);
