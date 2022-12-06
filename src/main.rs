@@ -16,7 +16,7 @@ fn main() {
     let parsed = parser::parse_file(&mut reader, args.files[0].to_str().unwrap().to_string());
     let defs = parsed.unwrap().definitions;
     let ycomb = defs.iter().find(|x| x.name == "ycomb").unwrap();
-    let converted = evaluator::convert(&ycomb.value, 0);
-    let unmixed = evaluator::unmix(&converted);
+    let converted = evaluator::conversion::convert(&ycomb.value, 0);
+    let unmixed = evaluator::conversion::unmix(&converted);
     println!("{:#?}", unmixed);
 }
