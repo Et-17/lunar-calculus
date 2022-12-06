@@ -45,6 +45,28 @@ pub fn convert(lambda: &Term, offset: u32) -> Term {
     }
 }
 
+pub fn unmix(mixed: &Term) -> structure::Program {
+    let mut converted = structure::Program {
+        form: structure::Combinator::I, // We don't know this yet so this is just a placeholder
+        args: Vec::new(),
+    };
+    let mut ptr = mixed;
+    'walker: loop {
+        match ptr {
+            Term::Com(c) => {
+                converted.form = c.clone();
+                break 'walker;
+            }
+            Term::App(a) => {
+                converted.args.push(unmix(&*a.argument));
+                ptr = &*a.function;
+            }
+            _ => panic!("unreachable"),
+        }
+    }
+    return converted;
+}
+
 pub fn free_app(app: Application, offset: u32) -> Term {
     Term::App(Application {
         function: Box::new(Term::App(Application {

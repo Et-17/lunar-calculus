@@ -4,3 +4,9 @@ pub enum Combinator {
     K,
     I,
 }
+
+#[derive(Debug)]
+pub struct Program {
+    pub form: Combinator,
+    pub args: Vec<Program>,
+}

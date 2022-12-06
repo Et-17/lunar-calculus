@@ -17,5 +17,6 @@ fn main() {
     let defs = parsed.unwrap().definitions;
     let ycomb = defs.iter().find(|x| x.name == "ycomb").unwrap();
     let converted = evaluator::convert(&ycomb.value, 0);
-    println!("{:#?}", converted);
+    let unmixed = evaluator::unmix(&converted);
+    println!("{:#?}", unmixed);
 }
