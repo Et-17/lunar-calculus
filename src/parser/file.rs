@@ -1,3 +1,5 @@
+use crate::evaluator::structure::Combinator;
+
 #[derive(Debug)]
 pub struct File {
     pub name: String,
@@ -15,6 +17,7 @@ pub enum Term {
     Lam(Lambda),
     App(Application),
     Var(Variable),
+    Com(Combinator),
 }
 
 #[derive(Clone, Debug)]
